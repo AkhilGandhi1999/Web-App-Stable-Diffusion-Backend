@@ -72,8 +72,8 @@ RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
 WORKDIR stable-diffusion/
 
-RUN conda update -n base --file environment.yaml
-
+RUN conda env create -f environment.yaml
+RUN conda activate ldm
 RUN pip install -r requirements.txt
 
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
