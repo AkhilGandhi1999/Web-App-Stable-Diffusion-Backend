@@ -56,6 +56,11 @@ COPY A2.jpg A2.jpg
 
 COPY requirements.txt requirements.txt
 
+RUN sudo apt install python3.8-distutils
+
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN sudo python3.8 get-pip.py
+
 RUN pip install -r requirements.txt
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
@@ -67,7 +72,6 @@ RUN conda env update -n base --file environment.yaml
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
 
 WORKDIR /
-
 CMD ["python3", "app.py"]
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
