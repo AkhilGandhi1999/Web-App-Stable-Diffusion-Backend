@@ -34,7 +34,7 @@ def if_bucket_exsist(file_id):
 def image_generated(text):
     try:
         os.chdir('stable-diffusion/')
-        os.system("python scripts/txt2img.py --prompt '{}' --plms --ckpt sd-v1-4.ckpt --skip_grid --n_samples 1".format(text))
+        os.system("python scripts/txt2img.py --prompt {} --plms --ckpt sd-v1-4.ckpt --skip_grid --n_samples 1".format(text))
         return True
     except:
         return False
@@ -58,8 +58,8 @@ def store_request(bucket_name=None, region=None):
                                         CreateBucketConfiguration=location)
         if image_generated(text):
             #upload to the bucket
-            dir = 'stable-diffusion/outputs/txt2img-samples/samples/'
-            for f in os.listdir(dir):
+            os.chdir('outputs/txt2img-samples/samples/')
+            for f in os.listdir():
                 file_name = f
                 object_name = file_name
                 s3.upload_file(file_name, bucket_name, object_name)
