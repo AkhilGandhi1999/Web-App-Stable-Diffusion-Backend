@@ -96,8 +96,7 @@ def getRecent():
         s3 = boto3.resource('s3')
         my_bucket = s3.Bucket(bucket_name)
         
-        os.chdir('/')
-        os.chdir('flask_server/send_images/')
+        os.chdir('~/flask_server/send_images/')
         # download file into current directory
         for s3_object in my_bucket.objects.all():
             # Need to split s3_object.key into path and file name, else it will give error file not found.
