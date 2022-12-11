@@ -15,7 +15,6 @@ RUN sudo apt-get install python3.8 -y
 
 #Install utilities
 RUN apt-get update
-RUN apt install python3-pip -y  
 RUN apt install curl -y 
 RUN apt install unzip -y 
 RUN apt install wget -y
@@ -64,7 +63,6 @@ RUN wget https://bootstrap.pypa.io/get-pip.py
 
 RUN sudo python3.8 get-pip.py
 
-RUN pip install -r requirements.txt
 
 RUN mkdir /send_images
 
@@ -73,6 +71,8 @@ RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 WORKDIR /stable-diffusion
 
 RUN conda env update -n base --file environment.yaml
+
+RUN pip install -r requirements.txt
 
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
 
