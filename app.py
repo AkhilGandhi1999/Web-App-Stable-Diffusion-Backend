@@ -72,7 +72,7 @@ def store_request(bucket_name=None, region=None):
             stream.seek(0)
 
             #clean the folder after running the model
-            for f in os.listdir(dir):
+            for f in os.listdir():
                 os.remove(os.path.join(f))
 
             #return the zip file
