@@ -50,9 +50,9 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     . /root/.bashrc && \
     conda update conda
 
-RUN mkdir /app
+RUN mkdir /flask_server
 
-WORKDIR /app
+WORKDIR /flask_server
 
 COPY app.py app.py
 
@@ -64,13 +64,13 @@ RUN wget https://bootstrap.pypa.io/get-pip.py
 
 RUN sudo python3.8 get-pip.py
 
-RUN mkdir /send_images
+RUN mkdir send_images/
 
 RUN sudo apt-get update
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
-WORKDIR /stable-diffusion
+WORKDIR stable-diffusion/
 
 RUN conda update -n base --file environment.yaml
 
