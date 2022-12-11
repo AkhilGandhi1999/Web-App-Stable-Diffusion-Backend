@@ -24,7 +24,11 @@ RUN apt install wget -y
 RUN sudo apt install glibc-source -y && \
 	sudo apt-get install groff -y && \
 	sudo apt-get install less -y
-	
+
+RUN mkdir /flask_server
+
+WORKDIR /flask_server
+
 #Install AWS cli 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
@@ -50,9 +54,6 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     . /root/.bashrc && \
     conda update conda
 
-RUN mkdir /flask_server
-
-WORKDIR /flask_server
 
 COPY app.py app.py
 

@@ -75,6 +75,7 @@ def store_request(bucket_name=None, region=None):
             for f in os.listdir():
                 os.remove(os.path.join(f))
 
+            os.chdir('../../../../')
             #return the zip file
             return send_file(
                 stream,
@@ -113,6 +114,7 @@ def getRecent():
         for f in os.listdir():
             os.remove(os.path.join(f))
 
+        os.chdir('../')
         return send_file(
             stream,
             as_attachment=True,
