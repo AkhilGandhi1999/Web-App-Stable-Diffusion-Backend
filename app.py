@@ -31,17 +31,20 @@ def if_bucket_exsist(file_id):
 
     return True
 
-def image_generated():
-    return True
+def image_generated(text):
+    try:
+        os.chdir('stable-diffusion/')
+        os.system("python scripts/txt2img.py --prompt '{}' --plms --ckpt sd-v1-4.ckpt --skip_grid --n_samples 1".format(text))
+        return True
+    except:
+        return False
 
 @app.route('/store', methods=['GET'])
 def store_request(bucket_name=None, region=None):
     try:
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        file_name = 'A2.jpg' #add time stamp later
-        object_name = file_name
         args = request.args.to_dict()
         file_id = args['user_id']
+        text = args['caption']
         bucket_name = re.sub(r'@.*', '', file_id)
         region = 'us-west-1'
         if if_bucket_exsist(bucket_name):
@@ -53,8 +56,31 @@ def store_request(bucket_name=None, region=None):
                 location = {'LocationConstraint': region}
                 s3_client.create_bucket(Bucket=bucket_name,
                                         CreateBucketConfiguration=location)
-        if image_generated():
-            s3.upload_file(file_name, bucket_name, object_name)
+        if image_generated(text):
+            #upload to the bucket
+            dir = 'stable-diffusion/outputs/txt2img-samples/samples/'
+            for f in os.listdir(dir):
+                file_name = f
+                object_name = file_name
+                s3.upload_file(file_name, bucket_name, object_name)
+
+            #package images in zip file
+            stream = BytesIO()
+            with ZipFile(stream, 'w') as zf:
+                for file in glob(os.path.join('*.png')):
+                    zf.write(file, os.path.basename(file))
+            stream.seek(0)
+
+            #clean the folder after running the model
+            for f in os.listdir(dir):
+                os.remove(os.path.join(f))
+
+            #return the zip file
+            return send_file(
+                stream,
+                as_attachment=True,
+                download_name='archive.zip'
+            )
 
     except ClientError as e:
         logging.error(e)

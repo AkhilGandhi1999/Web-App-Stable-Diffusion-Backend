@@ -50,6 +50,10 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     . /root/.bashrc && \
     conda update conda
 
+RUN mkdir /app
+
+WORKDIR /app
+
 COPY app.py app.py
 
 COPY A2.jpg A2.jpg
@@ -59,6 +63,7 @@ COPY requirements.txt requirements.txt
 RUN sudo apt install python3.8-distutils
 
 RUN wget https://bootstrap.pypa.io/get-pip.py
+
 RUN sudo python3.8 get-pip.py
 
 RUN pip install -r requirements.txt
@@ -72,6 +77,9 @@ RUN conda env update -n base --file environment.yaml
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
 
 WORKDIR /
+
+WORKDIR /app
+
 CMD ["python3", "app.py"]
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
