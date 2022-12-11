@@ -63,8 +63,9 @@ RUN wget https://bootstrap.pypa.io/get-pip.py
 
 RUN sudo python3.8 get-pip.py
 
-
 RUN mkdir /send_images
+
+RUN sudo apt-get update
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
