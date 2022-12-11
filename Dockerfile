@@ -15,6 +15,7 @@ RUN sudo apt-get install python3.8 -y
 
 #Install utilities
 RUN apt-get update
+RUN apt install python3-pip -y
 RUN apt install curl -y 
 RUN apt install unzip -y 
 RUN apt install wget -y
