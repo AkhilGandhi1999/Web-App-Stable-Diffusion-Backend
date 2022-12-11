@@ -57,7 +57,7 @@ COPY app.py app.py
 
 COPY requirements.txt requirements.txt
 
-RUN sudo apt install python3.8-distutils
+RUN sudo apt install python3.8-distutils -y
 
 RUN wget https://bootstrap.pypa.io/get-pip.py
 
