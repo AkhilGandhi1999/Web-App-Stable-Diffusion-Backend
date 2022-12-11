@@ -72,7 +72,7 @@ RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
 WORKDIR /stable-diffusion
 
-RUN conda env update -n base --file environment.yaml
+RUN conda update -n base --file environment.yaml
 
 RUN pip install -r requirements.txt
 
