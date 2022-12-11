@@ -96,7 +96,6 @@ def getRecent():
         s3 = boto3.resource('s3')
         my_bucket = s3.Bucket(bucket_name)
         
-        os.chdir('../../../../')
         os.chdir('send_images/')
         # download file into current directory
         for s3_object in my_bucket.objects.all():
