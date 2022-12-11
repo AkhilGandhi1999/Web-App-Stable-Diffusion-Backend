@@ -56,8 +56,6 @@ WORKDIR /app
 
 COPY app.py app.py
 
-COPY A2.jpg A2.jpg
-
 COPY requirements.txt requirements.txt
 
 RUN sudo apt install python3.8-distutils
@@ -67,6 +65,8 @@ RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN sudo python3.8 get-pip.py
 
 RUN pip install -r requirements.txt
+
+RUN mkdir /send_images
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 

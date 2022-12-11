@@ -109,6 +109,10 @@ def getRecent():
                 zf.write(file, os.path.basename(file))
         stream.seek(0)
 
+        #clean the folder after running the model
+        for f in os.listdir():
+            os.remove(os.path.join(f))
+
         return send_file(
             stream,
             as_attachment=True,
