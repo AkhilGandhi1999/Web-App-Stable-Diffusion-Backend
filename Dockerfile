@@ -71,8 +71,10 @@ RUN unzip awscliv2.zip
 RUN sudo ./aws/install
 
 #Configure AWS cli
-COPY config ~/.aws/
-COPY credentials ~/.aws/
+RUN mkdir /.aws
+
+COPY config /.aws
+COPY credentials /.aws
 
 WORKDIR /flask_server
 
