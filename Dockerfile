@@ -71,10 +71,10 @@ RUN unzip awscliv2.zip
 RUN sudo ./aws/install
 
 #Configure AWS cli
-RUN mkdir /.aws
-
-COPY config /.aws
-COPY credentials /.aws
+RUN aws configure set aws_access_key_id AKIA2ADG2OQX3ASBNMNT
+RUN aws configure set aws_secret_access_key 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
+RUN aws configure set default.region us-west-1
+RUN aws configure set output table
 
 WORKDIR /flask_server
 
