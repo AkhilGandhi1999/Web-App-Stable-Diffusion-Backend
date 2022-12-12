@@ -8,10 +8,12 @@ import os
 from glob import glob
 from io import BytesIO
 from zipfile import ZipFile
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
 s3 = boto3.client('s3')
+cors = CORS(app)
 
 
 @app.route('/', methods=['GET', 'POST'])

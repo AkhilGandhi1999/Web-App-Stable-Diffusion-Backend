@@ -40,7 +40,7 @@ RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
 WORKDIR stable-diffusion/
 
-RUN conda env create -f environment.yaml
+RUN conda env update -n base --file environment.yaml
 
 #Install aws cli prereq
 RUN sudo apt install glibc-source -y && \
@@ -56,6 +56,8 @@ RUN mkdir send_images/
 COPY app.py app.py
 
 COPY requirements.txt requirements.txt
+
+RUN apt install python3-pip -y  
 
 RUN pip install -r requirements.txt
 
@@ -73,5 +75,8 @@ COPY config ~/.aws/
 COPY credentials ~/.aws/
 
 WORKDIR /flask_server
+
+EXPOSE 5000
+EXPOSE 80
 
 CMD ["python3", "app.py"]
