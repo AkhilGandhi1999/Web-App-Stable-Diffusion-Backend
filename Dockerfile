@@ -6,44 +6,16 @@ RUN apt-get update && apt-get upgrade -y
 #Install sudo
 RUN apt install sudo tasksel -y
 
-#Set Timezone var
-ENV TZ=America/Denver
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
 #Install python
 RUN sudo apt-get install python3.8 -y
 
 #Install utilities
-RUN apt-get update
-RUN apt install python3-pip -y
-RUN apt install curl -y 
-RUN apt install unzip -y 
-RUN apt install wget -y
+RUN sudo apt-get update
+RUN sudo apt install python3-pip -y
+RUN sudo apt install curl -y 
+RUN sudo apt install unzip -y 
+RUN sudo apt install wget -y
 
-#Install aws cli prereq
-RUN sudo apt install glibc-source -y && \
-	sudo apt-get install groff -y && \
-	sudo apt-get install less -y
-
-
-#Install AWS cli 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN sudo ./aws/install
-
-#Configure AWS cli
-COPY config ~/.aws/
-COPY credentials ~/.aws/
-
-#Install git
-RUN apt-get update -y
-RUN apt-get update && apt-get install git-all -y
-
-RUN mkdir /flask_server
-
-WORKDIR /flask_server
-
-#Install Miniconda 
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
@@ -55,33 +27,51 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     . /root/.bashrc && \
     conda update conda
 
+ENV TZ=America/Denver
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY app.py app.py
+RUN mkdir /flask_server
 
-COPY requirements.txt requirements.txt
+WORKDIR /flask_server
 
-# RUN sudo apt install python3.8-distutils -y
-
-# RUN wget https://bootstrap.pypa.io/get-pip.py
-
-# RUN sudo python3.8 get-pip.py
-
-RUN mkdir send_images/
+RUN sudo apt-get update && apt-get install git-all -y
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
 WORKDIR stable-diffusion/
 
-RUN conda env update -n base --file env.yaml
+RUN conda env create -f environment.yaml
 
-RUN pip install -r requirements.txt
+#Install aws cli prereq
+RUN sudo apt install glibc-source -y && \
+	sudo apt-get install groff -y && \
+	sudo apt-get install less -y
 
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
 
-WORKDIR /
+WORKDIR /flask_server
 
-WORKDIR /app
+RUN mkdir send_images/
 
-CMD ["python3", "app.py"]
+COPY app.py app.py
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
 
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
+
+WORKDIR /
+
+#Install AWS cli 
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN sudo ./aws/install
+
+#Configure AWS cli
+COPY config ~/.aws/
+COPY credentials ~/.aws/
+
+WORKDIR /flask_server
+
+CMD ["python3", "app.py"]
