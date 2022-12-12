@@ -25,9 +25,6 @@ RUN sudo apt install glibc-source -y && \
 	sudo apt-get install groff -y && \
 	sudo apt-get install less -y
 
-RUN mkdir /flask_server
-
-WORKDIR /flask_server
 
 #Install AWS cli 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -41,6 +38,10 @@ COPY credentials ~/.aws/
 #Install git
 RUN apt-get update -y
 RUN apt-get update && apt-get install git-all -y
+
+RUN mkdir /flask_server
+
+WORKDIR /flask_server
 
 #Install Miniconda 
 ENV PATH="/root/miniconda3/bin:${PATH}"
@@ -59,22 +60,20 @@ COPY app.py app.py
 
 COPY requirements.txt requirements.txt
 
-RUN sudo apt install python3.8-distutils -y
+# RUN sudo apt install python3.8-distutils -y
 
-RUN wget https://bootstrap.pypa.io/get-pip.py
+# RUN wget https://bootstrap.pypa.io/get-pip.py
 
-RUN sudo python3.8 get-pip.py
+# RUN sudo python3.8 get-pip.py
 
 RUN mkdir send_images/
-
-RUN sudo apt-get update
 
 RUN git clone https://github.com/AkGandhi99/stable-diffusion.git
 
 WORKDIR stable-diffusion/
 
-RUN conda env create -f environment.yaml
-RUN conda activate ldm
+RUN conda env update -n base --file env.yaml
+
 RUN pip install -r requirements.txt
 
 RUN curl https://f004.backblazeb2.com/file/aai-blog-files/sd-v1-4.ckpt > sd-v1-4.ckpt
